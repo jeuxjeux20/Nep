@@ -1,9 +1,34 @@
 //coded by firec and cth103
+var fs = require("fs")
 const Eris = require("eris");
 const commands = require("./commands.js");
 var bot = new Eris("BOT_TOKEN");
 var prefix = "n!";
+let cmdlet = {};
+//sorry tttie i'm a skid
+let loadAll = function () {
+    let fa = fs.readdirSync("./");
+    for (let i = 0; i < fa.length; i++) {
+        let cmF = fa[i];
+        if (/.+\.js$/.test(cmF)) {
+            let cmN = cmF.match(/(.+)\.js$/)[1]
+            try {
+                let cmFL = require("./cmd_" + cmN + ".js")
+                if (cmFL.isCmd) {
+                    console.log(`${__filename}      | Loading ${cmN} command, file ${cmF}`)
+                    cmds[cmN.toLowerCase()] = cmFL;
+                }
+                else console.log(__filename + "    | Skipping non-command " + cmF)
+            } catch (err) {
+                console.error(`Error while loading command ${cmN}: ${err}`)
+                console.error(err)
+            }
 
+        } else {
+            console.log(__filename + "     | Skipping non-JS " + cmF)
+        }
+    }
+}
 bot.on("ready", () => { 
     console.log("I am ready, BEEP BOOP."); // log when the bot is ready
 });
@@ -37,6 +62,18 @@ bot.on("messageDelete", msg => {
 });
 
 bot.on("messageCreate", msg => {
-  //MAKING IT MODULAR SOON.
+	//took from TTtie, im sorry tttie
+  if (msg.content.startsWith(prefix)) {
+        var command = msg.content.slice(5)
+        var commandName = command.split(" ")[0];
+        var args = command.slice((commandName.length + 1))
+        pol(msg);
+        if (cmds[commandName]) {
+            try {
+                cmds[commandName](msg, bot)
+            } catch (e) {
+                console.error(e)
+            }
+        }
 });
 bot.connect();
