@@ -2,6 +2,7 @@
 const Eris = require("eris");
 const commands = require("./commands");
 var bot = new Eris("BOT_TOKEN");
+var prefix = "n!";
 
 bot.on("ready", () => { 
     console.log("I am ready, BEEP BOOP."); // log when the bot is ready
@@ -35,3 +36,7 @@ bot.on("messageDelete", msg => {
   console.log("Message deleted, contents: " + msg.content);
 });
 
+bot.on("messageCreate", msg => {
+  //MAKING IT MODULAR SOON.
+});
+bot.connect();
