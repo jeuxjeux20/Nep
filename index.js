@@ -1,6 +1,6 @@
 //coded by firec and cth103
 const Eris = require("eris");
-const commands = require("./commands");
+const commands = require("./commands.js");
 var bot = new Eris("BOT_TOKEN");
 var prefix = "n!";
 
